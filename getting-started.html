@@ -13,12 +13,22 @@
         <link href="tabulator/dist/css/tabulator.min.css" rel="stylesheet">
     </head>
     <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-9 col-lg-6">
+                    <div id="example-table"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group col-6"> 
+                    <span class="input-group-addon">Filter Name</span> 
+                    <input type="text" class="form-control" placeholder="Name"> 
+                </div>
+            </div>
+        </div>
         <!-- Bootstrap core JavaScript
 		================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <div class="container">
-            <div id="example-table"></div>
-        </div>
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/popper.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
