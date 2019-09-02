@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Pagination</title>
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="tabulator/dist/css/tabulator.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="table-controls col-lg-10">
+                <span> <label>Field: </label> <select id="filter-field">
+                        <option></option>
+                        <option value="baujahr">Baujahr</option>
+                        <option value="kompaktheit">Kompaktheit</option>
+                        <option value="ausstellungsdatumdatum">Ausstellungsdatum</option>
+                    </select> </span>
+                <span> <label>Type: </label> <select id="filter-type">
+                        <option value="=">=</option>
+                        <option value="<">&lt;</option>
+                        <option value="<=">&lt;=</option>
+                        <option value=">">&gt;</option>
+                        <option value=">=">&gt;=</option>
+                        <option value="!=">!=</option>
+                        <option value="like">like</option>
+                    </select> </span>
+                <span><label>Value: </label> <input id="filter-value" type="text" placeholder="value to filter"></span>
+                <button id="filter-clear">Clear Filter</button>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-11">
+                <div id="example-table"></div>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+		================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/popper.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="tabulator/dist/js/tabulator.min.js"></script>
+    <script type="text/javascript">
+
+        $(".view-source").on("click", function () {
+            $(this).next(".source").slideToggle();
+        });
+
+        $('body').scrollspy({
+            target: '.docs-sidebar',
+            offset: 40
+        });
+
+        $(".docs-sidenav-detailed h2").click(function () {
+            $(this).closest("li").toggleClass("open");
+        });
+
+    </script>
+    <script type="text/javascript">
+
+        //Custom filter example
+        function customFilter(data) {
+            return data.car && data.rating < 3;
+        }
+
+        //Trigger setFilter function with correct parameters
+        function updateFilter() {
+
+            var filter = $("#filter-field").val() == "function" ? customFilter : $("#filter-field").val();
+
+            if ($("#filter-field").val() == "function") {
+                $("#filter-type").prop("disabled", true);
+                $("#filter-value").prop("disabled", true);
+            } else {
+                $("#filter-type").prop("disabled", false);
+                $("#filter-value").prop("disabled", false);
+            }
+
+            table.setFilter(filter, $("#filter-type").val(), $("#filter-value").val());
+        }
+
+        //Update filters on value change
+        $("#filter-field, #filter-type").change(updateFilter);
+        $("#filter-value").keyup(updateFilter);
+
+        //Clear filters on "Clear Filters" button click
+        $("#filter-clear").click(function () {
+            $("#filter-field").val("");
+            $("#filter-type").val("=");
+            $("#filter-value").val("");
+
+            table.clearFilter();
+        });
+
+
+
+        //create Tabulator on DOM element with id "example-table"
+        var table = new Tabulator("#example-table", {
+            ajaxURL: "https://gis2.hydro-it.com:9028/be1/tables/energieausweiswg",
+            ajaxResponse: function (url, params, response) {
+                //url - the URL of the request
+                //params - the parameters passed with the request
+                //response - the JSON object returned in the body of the response.
+
+                return response; //return the tableData property of a response json object
+            },
+            height:"200px",
+            layout: "fitColumns", //fit columns to width of table (optional)
+            pagination:"remote", //enable remote pagination
+            paginationDataReceived: { "data" : "objects", "total_pages" : "last_page" },
+            paginationSize: 5,
+            columns: [ //Define Table Columns
+                { title: "Baujahr", field: "baujahr", editor: true },
+                { title: "Kompaktheit", field: "kompaktheit", editor: true },
+                { title: "Objektnummer", field: "objektnummer", editor: true },
+                { title: "Ausstellungsdatum", field: "ausstellungsdatumdatum", sorter: "date", align: "center", editor: true },
+            ],
+            // rowClick:function(e, row){ //trigger an alert message when the row is clicked
+            //     alert("Row " + row.getData().id + " Clicked!!!!");
+            // 	},
+        });
+    </script>
+</body>
+
+</html>
