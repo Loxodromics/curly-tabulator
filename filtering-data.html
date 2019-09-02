@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Loading Data</title>
+        <!-- Bootstrap core CSS -->
+        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="tabulator/dist/css/tabulator.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="table-controls col-lg-10">
+                    <span> <label>Field: </label> <select id="filter-field">
+                            <option></option>
+                            <option value="name">Name</option>
+                            <option value="progress">Progress</option>
+                            <option value="gender">Gender</option>
+                            <option value="rating">Rating</option>
+                            <option value="col">Favourite Colour</option>
+                            <option value="dob">Date Of Birth</option>
+                            <option value="car">Drives</option>
+                            <option value="function">Drives &amp;Rating &lt; 3</option>
+                        </select> </span>
+                    <span> <label>Type: </label> <select id="filter-type">
+                            <option value="=">=</option>
+                            <option value="<">&lt;</option>
+                            <option value="<=">&lt;=</option>
+                            <option value=">">&gt;</option>
+                            <option value=">=">&gt;=</option>
+                            <option value="!=">!=</option>
+                            <option value="like">like</option>
+                        </select> </span>
+                    <span><label>Value: </label> <input id="filter-value" type="text" placeholder="value to filter"></span>
+                    <button id="filter-clear">Clear Filter</button>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-11">
+                    <div id="example-table"></div>
+                </div>
+            </div>
+            <div class="row">
+</div>
+        </div>
+        <!-- Bootstrap core JavaScript
+		================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/popper.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="tabulator/dist/js/tabulator.min.js"></script>
+        <script type="text/javascript">
+
+    $(".view-source").on("click", function(){
+	    $(this).next(".source").slideToggle();
+	});
+
+    $('body').scrollspy({
+	    target: '.docs-sidebar',
+		offset: 40
+	});
+
+    $(".docs-sidenav-detailed h2").click(function(){
+	    $(this).closest("li").toggleClass("open");
+	});
+
+</script>
+        <script type="text/javascript">
+
+
+       //create Tabulator on DOM element with id "example-table"
+       var table = new Tabulator("#example-table", {
+	ajaxURL: "https://gis2.hydro-it.com:9028/be1/tables/energieausweiswg",
+	ajaxResponse:function(url, params, response){
+        //url - the URL of the request
+        //params - the parameters passed with the request
+        //response - the JSON object returned in the body of the response.
+
+        return response.objects; //return the tableData property of a response json object
+    },
+	layout:"fitColumns", //fit columns to width of table (optional)
+	columns:[ //Define Table Columns
+		{title:"Baujahr", field:"baujahr", editor: true},
+        {title:"kompaktheit", field:"kompaktheit", editor: true},
+		{title:"Objektnummer", field:"objektnummer", editor: true},
+		{title:"Ausstellungsdatum", field:"ausstellungsdatumdatum", sorter:"date", align:"center", editor: true},
+		],
+	// rowClick:function(e, row){ //trigger an alert message when the row is clicked
+	//     alert("Row " + row.getData().id + " Clicked!!!!");
+	// 	},
+});
+       </script>
+    </body>
+</html>
